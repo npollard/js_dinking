@@ -3,7 +3,16 @@
     <head>
         <title>CLOCK TEST</title>
     </head>
-    <body>
-        <p>TEST.</p>
+    <body onload=setInterval(function(){setTime()},100);>
+        <p id="time"></p>
     </body>
+    <script>
+        function setTime() {
+            var d = new Date();
+            var timeString = (d.getHours() % 12) + ":";
+            if (d.getMinutes() < 10) timeString += "0";
+            timeString += d.getMinutes() + ":" + d.getSeconds();
+            document.getElementById("time").innerHTML = timeString;
+        }
+    </script>
 </html>
