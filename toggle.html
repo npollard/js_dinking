@@ -25,6 +25,7 @@
               background-color: #f2f2f2;
               opacity: 0;
               z-index: 1;
+              visibility: hidden;
               -webkit-transition: all 0.3s;
               -moz-transition: all 0.3s;
               -ms-transition: all 0.3s;
@@ -81,6 +82,9 @@
                 <div class="toggle__switch toggle__switch--on"></div>
             </div>
             <p>THESE ARE SOME WORDS.</p>
+            <a href="#">THIS IS CLICKABLE</a>
+            <br/><br/>
+            <button type="button">THIS IS A BUTTON.</button>
         </div>
         <script>
             function toggle(element) {
@@ -90,9 +94,11 @@
                 if (toggleSwitch.classList.contains("toggle__switch--off")) {
                     toggleSwitch.classList.remove("toggle__switch--off");
                     overlay.style.opacity = "0";
+                    overlay.style.visibility = "hidden";
                 } else {
                     toggleSwitch.classList.add("toggle__switch--off");
                     overlay.style.opacity = "0.7";
+                    overlay.style.visibility = "visible";
                 }
             }
         </script>
