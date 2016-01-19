@@ -11,7 +11,9 @@
             var d = new Date();
             var timeString = (d.getHours() % 12) + ":";
             if (d.getMinutes() < 10) timeString += "0";
-            timeString += d.getMinutes() + ":" + d.getSeconds();
+            timeString += d.getMinutes() + ":";
+            if (d.getSeconds() < 10) timeString += "0";
+            timeString += d.getSeconds();
             document.getElementById("time").innerHTML = timeString;
         }
     </script>
