@@ -12,10 +12,23 @@
               height: 60px;
             }
 
-            #button--open {
+            #instructions {
               position: absolute;
               left: 40%;
               top: 20%;
+              width: 20%;
+            }
+
+            #button--open {
+              position: absolute;
+              left: 40%;
+              top: 30%;
+            }
+
+            #touch-status {
+              position: absolute;
+              left: 40%;
+              top: 40%;
             }
 
             .menu {
@@ -40,33 +53,35 @@
               left: 0;
             }
 
-            .overlay {
+            .touch-surface {
               position: absolute;
               left: 0;
               top: 0;
               bottom: 0;
               right: 0;
-              visibility: hidden;
-              z-index: 2;
             }
 
         </style>
     </head>
     <body>
-        <div id="overlay--full" class="overlay"></div>
-
-        <div class="menu">
-            <img src="http://expertintegratedsystemsblog.com/wp-content/uploads/2014/08/3image1-300x190.jpg"/>
-            <br/><br/>
-            <button>I am clickable</button>
+        <div id="touch-surface--full" class="touch-surface">
+            <div class="menu">
+                <img src="http://expertintegratedsystemsblog.com/wp-content/uploads/2014/08/3image1-300x190.jpg"/>
+                <br/><br/>
+                <button>I AM CLICKABLE</button>                
+            </div>
+            
+            <p id="instructions">Swipe right or click button to open menu. Swipe left or click outside menu to close menu.</p>
+            <button id="button--open">OPEN MENU</button>
+            <p id="touch-status">STATUS</p>
         </div>
-        
-        <button id="button--open">OPEN MENU</button>
 
         <script>
             // http://www.javascriptkit.com/javatutors/touchevents2.shtml
             window.addEventListener("load", function() {
-                var overlay = document.getElementById("overlay--full"),
+                var touchSurface = document.getElementById("touch-surface--full"),
+                    menuIsOpen = false,
+                    clicks = 0,
                     swipeThreshold = 60,
                     clickThreshold = 10,
                     swipeDuration = 400,
@@ -76,36 +91,42 @@
                 function openMenu() {
                     var menu = document.getElementsByClassName("menu")[0];
                     menu.classList.add("menu--open");
-                    var overlays = document.getElementsByClassName("overlay");
-                    for (i = 0; i < overlays.length; i++) {
-                        overlays[i].style.visibility = "visible";
-                    }
-                    
+                    menuIsOpen = true;
                 }
 
                 function closeMenu() {
                     var menu = document.getElementsByClassName("menu")[0];
                     menu.classList.remove("menu--open");
-                    var overlays = document.getElementsByClassName("overlay");
-                    for (i = 0; i < overlays.length; i++) {
-                        overlays[i].style.visibility = "hidden";
-                    }
+                    menuIsOpen = false;
                 }
 
-                document.getElementById("button--open").addEventListener("click", openMenu, false);
-
-                overlay.addEventListener("touchstart", function(e) {
+                document.getElementById("button--open").addEventListener("click", function(e) {
+                    if (!menuIsOpen) {
+                        openMenu();
+                        e.preventDefault();
+                    }
+                }, false);
+                
+                touchSurface.addEventListener("touchstart", function(e) {
                     startX = e.changedTouches[0].pageX;
                     startTime = new Date().getTime();
+                    document.getElementById("touch-status").innerHTML = startX;
                 }, false);
 
-                overlay.addEventListener("touchend", function(e) {
+                touchSurface.addEventListener("touchend", function(e) {
                     endX = e.changedTouches[0].pageX;
                     endTime = new Date().getTime();
-                    if (endTime - startTime < swipeDuration && swipeThreshold < startX - endX) closeMenu();
-                    if (endTime - startTime < clickDuration && 450 < startX && Math.abs(startX - endX) < clickThreshold) closeMenu();
-                    e.preventDefault();
+                    if (endTime - startTime < swipeDuration) {
+                        if (menuIsOpen && swipeThreshold < startX - endX) closeMenu();
+                        if (!menuIsOpen && swipeThreshold < endX - startX) openMenu();
+                    }
+                    document.getElementById("touch-status").innerHTML = endX;
                 }, false);
+
+                touchSurface.addEventListener("click", function(e) {
+                    if (menuIsOpen && 450 < e.clientX) closeMenu();
+                    document.getElementById("touch-status").innerHTML = "CLICK " + clicks++;
+                }, true);
 
             }, false);
 
