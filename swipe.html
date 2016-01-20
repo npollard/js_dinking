@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SWIPE TEST</title>
+        <style>
+            body {
+              background-color: #f2f2f2;
+            }
+
+            button {
+              width: 180px;
+              height: 60px;
+            }
+
+            #instructions {
+              position: absolute;
+              left: 40%;
+              top: 20%;
+              width: 20%;
+            }
+
+            #button--open {
+              position: absolute;
+              left: 40%;
+              top: 30%;
+            }
+
+            #touch-status {
+              position: absolute;
+              left: 40%;
+              top: 40%;
+            }
+
+            .menu {
+              position: absolute;
+              left: -400px;
+              top: 0;
+              bottom: 0;
+              width: 400px;
+              background-color: #e5f2ff;
+              border-style: solid;
+              border-color: #999;
+              border-width: 1px;
+              z-index: 1;
+              -webkit-transition: all 0.3s;
+              -moz-transition: all 0.3s;
+              -ms-transition: all 0.3s;
+              -o-transition: all 0.3s;
+              transition: all 0.3s;
+            }
+
+            .menu--open {
+              left: 0;
+            }
+
+            .touch-surface {
+              position: absolute;
+              left: 0;
+              top: 0;
+              bottom: 0;
+              right: 0;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="touch-surface--full" class="touch-surface">
+            <div class="menu">
+                <img src="http://expertintegratedsystemsblog.com/wp-content/uploads/2014/08/3image1-300x190.jpg"/>
+                <br/><br/>
+                <button>I AM CLICKABLE</button>                
+            </div>
+            
+            <p id="instructions">Swipe right or click button to open menu. Swipe left or click outside menu to close menu.</p>
+            <button id="button--open">OPEN MENU</button>
+            <p id="touch-status">STATUS</p>
+        </div>
+
+        <script>
+            // http://www.javascriptkit.com/javatutors/touchevents2.shtml
+            window.addEventListener("load", function() {
+                var touchSurface = document.getElementById("touch-surface--full"),
+                    menuIsOpen = false,
+                    clicks = 0,
+                    swipeThreshold = 60,
+                    clickThreshold = 10,
+                    swipeDuration = 400,
+                    clickDuration = 200,
+                    startX, endX, startTime, endTime;
+
+                function openMenu() {
+                    var menu = document.getElementsByClassName("menu")[0];
+                    menu.classList.add("menu--open");
+                    menuIsOpen = true;
+                }
+
+                function closeMenu() {
+                    var menu = document.getElementsByClassName("menu")[0];
+                    menu.classList.remove("menu--open");
+                    menuIsOpen = false;
+                }
+
+                document.getElementById("button--open").addEventListener("click", function(e) {
+                    if (!menuIsOpen) {
+                        openMenu();
+                        e.preventDefault();
+                    }
+                }, false);
+                
+                touchSurface.addEventListener("touchstart", function(e) {
+                    startX = e.changedTouches[0].pageX;
+                    startTime = new Date().getTime();
+                    document.getElementById("touch-status").innerHTML = startX;
+                }, false);
+
+                touchSurface.addEventListener("touchend", function(e) {
+                    endX = e.changedTouches[0].pageX;
+                    endTime = new Date().getTime();
+                    if (endTime - startTime < swipeDuration) {
+                        if (menuIsOpen && swipeThreshold < startX - endX) closeMenu();
+                        if (!menuIsOpen && swipeThreshold < endX - startX) openMenu();
+                    }
+                    document.getElementById("touch-status").innerHTML = endX;
+                }, false);
+
+                touchSurface.addEventListener("click", function(e) {
+                    if (menuIsOpen && 450 < e.clientX) closeMenu();
+                    document.getElementById("touch-status").innerHTML = "CLICK " + clicks++;
+                }, true);
+
+            }, false);
+
+        </script>
+    </body>
+</html>
