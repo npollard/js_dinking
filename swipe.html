@@ -15,10 +15,10 @@
 
             .menu {
               position: absolute;
-              left: -35%;
+              left: -400px;
               top: 0;
               bottom: 0;
-              width: 35%;
+              width: 400px;
               background-color: #e5f2ff;
               border-style: solid;
               border-color: #999;
@@ -37,6 +37,7 @@
 
             .overlay {
               position: absolute;
+              left: 0;
               top: 0;
               bottom: 0;
               right: 0;
@@ -44,29 +45,34 @@
               z-index: 1;
             }
 
-            #overlay--full {
-              left: 0;
-            }
-
-            #overlay--content {
-              left: 35%;
+            #touch-status {
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              size: 36px;
             }
  
         </style>
     </head>
     <body>
         <div id="overlay--full" class="overlay"></div>
-        <div id="overlay--content" class="overlay"></div>
 
         <div class="menu">
             <img src="http://expertintegratedsystemsblog.com/wp-content/uploads/2014/08/3image1-300x190.jpg"/>
         </div>
         
         <button id="button--open">OPEN MENU</button>
+        <p id="touch-status">STATUS</p>
 
         <script>
             // http://www.javascriptkit.com/javatutors/touchevents2.shtml
             window.addEventListener("load", function() {
+                var overlay = document.getElementById("overlay--full"),
+                    touchStatus = document.getElementById("touch-status"),
+                    swipeThreshold = 60,
+                    clickThreshold = 10,
+                    startX, endX;
+
                 function openMenu() {
                     var menu = document.getElementsByClassName("menu")[0];
                     menu.classList.add("menu--open");
@@ -86,18 +92,28 @@
                     }
                 }
 
-                var button = document.getElementById("button--open")
-                button.addEventListener("click", alert('hey'), false)
+                document.getElementById("button--open").addEventListener("click", openMenu, false);
 
-                document.getElementById("overlay--content").addEventListener("click", closeMenu(), false);
-
-                /*document.getElementById("overlay--full").addEventListener("touchStart", function(e) {
+                overlay.addEventListener("touchstart", function(e) {
+                    touchStatus.innerHTML = "touch";
+                    startX = e.changedTouches[0].pageX; 
+                    e.preventDefault();
                 }, false);
 
-                document.getElementById("overlay--full").addEventListener("touchEnd", function(e) {
-                }, false);*/
+                overlay.addEventListener("touchmove", function(e) {
+                    touchStatus.innerHTML = e.changedTouches[0].pageX;
+                    e.preventDefault();
+                }, false);
 
-            }, false)
+                overlay.addEventListener("touchend", function(e) {
+                    touchStatus.innerHTML = "donezo";
+                    endX = e.changedTouches[0].pageX;
+                    if (swipeThreshold < startX - endX) closeMenu();
+                    if (450 < startX && Math.abs(startX - endX) < clickThreshold) closeMenu();
+                    e.preventDefault();
+                }, false);
+
+            }, false);
 
         </script>
     </body>
