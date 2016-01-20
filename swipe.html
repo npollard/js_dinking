@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SWIPE TEST</title>
+        <style>
+            body {
+              background-color: #f2f2f2;
+            }
+
+            button {
+              position: absolute;
+              left: 40%;
+              top: 20%;
+            }
+
+            .menu {
+              position: absolute;
+              left: -35%;
+              top: 0;
+              bottom: 0;
+              width: 35%;
+              background-color: #e5f2ff;
+              border-style: solid;
+              border-color: #999;
+              border-width: 1px;
+              z-index: 1;
+              -webkit-transition: all 0.3s;
+              -moz-transition: all 0.3s;
+              -ms-transition: all 0.3s;
+              -o-transition: all 0.3s;
+              transition: all 0.3s;
+            }
+
+            .menu--open {
+              left: 0;
+            }
+
+            .overlay {
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              right: 0;
+              visibility: hidden;
+              z-index: 1;
+            }
+
+            #overlay--full {
+              left: 0;
+            }
+
+            #overlay--content {
+              left: 35%;
+            }
+ 
+        </style>
+    </head>
+    <body>
+        <div id="overlay--full" class="overlay"></div>
+        <div id="overlay--content" class="overlay"></div>
+
+        <div class="menu">
+            <img src="http://expertintegratedsystemsblog.com/wp-content/uploads/2014/08/3image1-300x190.jpg"/>
+        </div>
+        
+        <button id="button--open">OPEN MENU</button>
+
+        <script>
+            // http://www.javascriptkit.com/javatutors/touchevents2.shtml
+            window.addEventListener("load", function() {
+                function openMenu() {
+                    var menu = document.getElementsByClassName("menu")[0];
+                    menu.classList.add("menu--open");
+                    var overlays = document.getElementsByClassName("overlay");
+                    for (i = 0; i < overlays.length; i++) {
+                        overlays[i].style.visibility = "visible";
+                    }
+                    
+                }
+
+                function closeMenu() {
+                    var menu = document.getElementsByClassName("menu")[0];
+                    menu.classList.remove("menu--open");
+                    var overlays = document.getElementsByClassName("overlay");
+                    for (i = 0; i < overlays.length; i++) {
+                        overlays[i].style.visibility = "hidden";
+                    }
+                }
+
+                var button = document.getElementById("button--open")
+                button.addEventListener("click", alert('hey'), false)
+
+                document.getElementById("overlay--content").addEventListener("click", closeMenu(), false);
+
+                /*document.getElementById("overlay--full").addEventListener("touchStart", function(e) {
+                }, false);
+
+                document.getElementById("overlay--full").addEventListener("touchEnd", function(e) {
+                }, false);*/
+
+            }, false)
+
+        </script>
+    </body>
+</html>
