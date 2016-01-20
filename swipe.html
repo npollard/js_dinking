@@ -8,6 +8,11 @@
             }
 
             button {
+              width: 180px;
+              height: 60px;
+            }
+
+            #button--open {
               position: absolute;
               left: 40%;
               top: 20%;
@@ -42,16 +47,9 @@
               bottom: 0;
               right: 0;
               visibility: hidden;
-              z-index: 1;
+              z-index: 2;
             }
 
-            #touch-status {
-              position: absolute;
-              left: 50%;
-              top: 50%;
-              size: 36px;
-            }
- 
         </style>
     </head>
     <body>
@@ -59,19 +57,21 @@
 
         <div class="menu">
             <img src="http://expertintegratedsystemsblog.com/wp-content/uploads/2014/08/3image1-300x190.jpg"/>
+            <br/><br/>
+            <button>I am clickable</button>
         </div>
         
         <button id="button--open">OPEN MENU</button>
-        <p id="touch-status">STATUS</p>
 
         <script>
             // http://www.javascriptkit.com/javatutors/touchevents2.shtml
             window.addEventListener("load", function() {
                 var overlay = document.getElementById("overlay--full"),
-                    touchStatus = document.getElementById("touch-status"),
                     swipeThreshold = 60,
                     clickThreshold = 10,
-                    startX, endX;
+                    swipeDuration = 400,
+                    clickDuration = 200,
+                    startX, endX, startTime, endTime;
 
                 function openMenu() {
                     var menu = document.getElementsByClassName("menu")[0];
@@ -95,21 +95,15 @@
                 document.getElementById("button--open").addEventListener("click", openMenu, false);
 
                 overlay.addEventListener("touchstart", function(e) {
-                    touchStatus.innerHTML = "touch";
-                    startX = e.changedTouches[0].pageX; 
-                    e.preventDefault();
-                }, false);
-
-                overlay.addEventListener("touchmove", function(e) {
-                    touchStatus.innerHTML = e.changedTouches[0].pageX;
-                    e.preventDefault();
+                    startX = e.changedTouches[0].pageX;
+                    startTime = new Date().getTime();
                 }, false);
 
                 overlay.addEventListener("touchend", function(e) {
-                    touchStatus.innerHTML = "donezo";
                     endX = e.changedTouches[0].pageX;
-                    if (swipeThreshold < startX - endX) closeMenu();
-                    if (450 < startX && Math.abs(startX - endX) < clickThreshold) closeMenu();
+                    endTime = new Date().getTime();
+                    if (endTime - startTime < swipeDuration && swipeThreshold < startX - endX) closeMenu();
+                    if (endTime - startTime < clickDuration && 450 < startX && Math.abs(startX - endX) < clickThreshold) closeMenu();
                     e.preventDefault();
                 }, false);
 
