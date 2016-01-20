@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>TOGGLE TEST</title>
+        <style>
+            .section {
+              position: absolute;
+              left: 15%;
+              top: 15%;
+              width: 300px;
+              height: 300px;
+              background-color: #e5f2ff;
+              border-radius: 6px;
+              border-style: solid;
+              border-width: 1px;
+              padding: 50px; 
+            }
+
+            .section__overlay {
+              position: absolute;
+              left: 0;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              background-color: #f2f2f2;
+              opacity: 0;
+              z-index: 1;
+              visibility: hidden;
+              -webkit-transition: all 0.3s;
+              -moz-transition: all 0.3s;
+              -ms-transition: all 0.3s;
+              -o-transition: all 0.3s;
+              transition: all 0.3s;
+            }
+
+            .toggle {
+              position: absolute;
+              top: 20px;
+              right: 50px;
+              z-index: 2;
+            }
+
+            .toggle__bar {
+              position: absolute;
+              left: 4px;
+              top: 3px;
+              width: 28px;
+              height: 12px;
+              background-color: #b3b3b3;
+              border-radius: 6px;
+            }
+
+            .toggle__switch {
+              position: absolute;
+              top: 0;
+              left: 16px;
+              width: 16px;
+              height: 16px;
+              background-color: #eaeae1;
+              border-radius: 8px;
+              border-style: solid;
+              border-width: 1px;
+              border-color: #999;
+              -webkit-transition: all 0.3s;
+              -moz-transition: all 0.3s;
+              -ms-transition: all 0.3s;
+              -o-transition: all 0.3s;
+              transition: all 0.3s;
+            }
+
+            .toggle__switch.toggle__switch--off {
+              left: 0;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="section">
+            <div class="section__overlay"></div>
+            <div class="toggle" onClick="toggle(this)">
+                <div class="toggle__bar"></div>
+                <div class="toggle__switch toggle__switch--on"></div>
+            </div>
+            <p>THESE ARE SOME WORDS.</p>
+            <a href="#">THIS IS CLICKABLE</a>
+            <br/><br/>
+            <button type="button">THIS IS A BUTTON.</button>
+        </div>
+        <script>
+            function toggle(element) {
+                var toggleSwitch = element.children[1];
+                var overlay = element.parentNode.children[0];
+                var section
+                if (toggleSwitch.classList.contains("toggle__switch--off")) {
+                    toggleSwitch.classList.remove("toggle__switch--off");
+                    overlay.style.opacity = "0";
+                    overlay.style.visibility = "hidden";
+                } else {
+                    toggleSwitch.classList.add("toggle__switch--off");
+                    overlay.style.opacity = "0.7";
+                    overlay.style.visibility = "visible";
+                }
+            }
+        </script>
+    </body>
+</html>
